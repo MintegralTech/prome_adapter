@@ -51,6 +51,7 @@ func main() {
 			return
 		}
 		for _, ts := range req.Timeseries {
+			fmt.Println(ts)
 			m := make(model.Metric, len(ts.Labels))
 			for _, l := range ts.Labels {
 				m[model.LabelName(l.Name)] = model.LabelValue(l.Value)
@@ -65,3 +66,9 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":1234", nil))
 }
+
+
+
+
+
+
