@@ -1,2 +1,13 @@
-remote_write:
-    url: http://
+runtime:
+    buffer: 500000
+
+data:
+    remote_url: "http//"
+    jobNames: 
+    - "dsp"
+    - "dsp_impression"
+    - "pioneer"
+
+filter:
+    whilelist:
+    - "temp_metrics"
