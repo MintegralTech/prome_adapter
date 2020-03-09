@@ -33,7 +33,6 @@ func Wrapper(handler HandlerFunc) func(c *gin.Context) {
     }
 }
 
-
 func (resp *Response) Error() string {
     return resp.Msg
 }

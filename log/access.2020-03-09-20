@@ -1,2 +1,0 @@
-{"level":"info","msg":"access","request":null,"time":"2020-03-09T20:11:59+08:00"}
-{"level":"info","msg":"access","request":null,"time":"2020-03-09T20:15:25+08:00","url":{"Scheme":"","Opaque":"","User":null,"Host":"","Path":"/helloworld","RawPath":"","ForceQuery":false,"RawQuery":"","Fragment":""}}
