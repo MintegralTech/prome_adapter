@@ -25,11 +25,15 @@ func NewTimeSeriesQueue(buffer int) *timeSeriesQueue {
     }
 }
 
-func (tsq *timeSeriesQueue) Append(wreq *prompb.WriteRequest) {
-    for _, ts := range *wreq.Timeseries {
-        tsq.queue <- &ts
+func (tsq *timeSeriesQueue) Producer(wreq *prompb.WriteRequest) {
+    for _, ts := range wreq.Timeseries {
+        tsq.queue <- ts
     }
 }
+
+//func (tsq *timeSeriesQueue) Consumer(){
+//    
+//}
 
 func (tsq *timeSeriesQueue) Length() int {
     return len(tsq.queue)

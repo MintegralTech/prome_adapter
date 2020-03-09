@@ -1,9 +1,8 @@
 package model
 
 import (
-    "github.com/go-kit/kit/log"
-    "github.com/go-kit/kit/log/level"
     "github.com/prometheus/prometheus/prompb"
+    "github.com/hashicorp/terraform/helper/hashcode"
 )
 
 type block struct {
@@ -11,7 +10,7 @@ type block struct {
 }
 
 type cache struct {
-    data map[string]string
+    data map[int]string
 }
 
 type Aggregator struct {
@@ -24,33 +23,40 @@ type Aggregator struct {
 }
 
 type Aggregators struct {
-    logger log.Logger
     jobNum int
-    aggs  map[string]*aggregator
+    aggs  map[string]*Aggregator
 }
 
-var collection Aggregators
+var Collection Aggregators
+
+func init() {
+    Collection = NewAggregators(Conf.jobNames)
+}
 
 func NewAggregator(jobName string) *Aggregator {
     return &Aggregator{
-        whiteList: Conf.whitelist
+        whiteList: Conf.whitelist,
         jobName:   jobName,
-        prevCache: &cache{data: make(map[string]string)}
-        aggCache:  &cache{data: make(map[string]string)}
-        packing:   &block{data: make(map[string]*prompb.TimeSeries)}
-        aggCache:  &cache{data: make(map[string]string)*prompb.TimeSeries}
+        prevCache: &cache{data: make(map[int]string)},
+        aggCache:  &cache{data: make(map[int]string)},
+        packing:   &block{data: make(map[string]*prompb.TimeSeries)},
+        writing:   &block{data: make(map[string]*prompb.TimeSeries)},
     }
 }
 
-func NewAggregators(logger log.Logger, jobNames []string) *Aggregators {
+func NewAggregators(jobNames []string) *Aggregators {
     aggregators := &Aggregators{
-        logger: logger,
         jobNum: len(jobNames),
-        aggs: make(map[string]*aggregator, len(jobNames))
+        aggs: make(map[string]*Aggregator, len(jobNames)),
     }
     for _, jobName := range jobNames {
         aggregators.aggs[jobName] = NewAggregator(jobName)
     }
     return aggregators
+}
+
+func (collection *Aggregators) UpdateOne(ts *prompb.TimeSeries) {
+     
+
 
 }

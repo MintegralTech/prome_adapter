@@ -1,21 +1,19 @@
 package main
 
 import (
+    "net/http"
+    . "prome_adpater/model"
+    "prome_adpater/controller"
+    "github.com/sirupsen/logrus"
     "github.com/gin-gonic/gin"
-    "./controller"
 )
 
-type HandlerFunc func(context *gon.Context) error
-
-func wrapper(handler HandlerFunc) func(context *gin.Context) {
-    return func(c *gin.Context) {
-        handler(c)
-    }
-}
 
 func main() {
     router := gin.New()
     router.Use(gin.Recovery())
+    router.NoMethod(controller.HandleNotFound)
+    router.NoRoute(controller.HandleNotFound)
     router.GET("/helloworld", helloworld)
     router.POST("/receive", controller.Wrapper(controller.Receive))
     //metrics := router.Group("/metrics")
@@ -23,4 +21,9 @@ func main() {
     //    receive.POST("/aggregate", controller.Wrapper(controller.Receive))
     //}
     router.Run(":1234")
+}
+
+func helloworld(c *gin.Context) {
+    c.String(http.StatusOK, "hello world")
+    AccLog.WithFields(logrus.Fields{"request": c.Request.PostForm, "url": c.Request.URL}).Info("access")
 }
